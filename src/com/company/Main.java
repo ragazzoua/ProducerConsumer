@@ -43,8 +43,11 @@ class MyProducer implements Runnable {
             try {
                 System.out.println(color + "Adding..." + num);
                 bufferLock.lock();
-                buffer.add(num);
-                bufferLock.unlock();
+                try {
+                    buffer.add(num);
+                } finally {
+                    bufferLock.unlock();
+                }
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 System.out.println("Producer was interrupted");
@@ -53,8 +56,11 @@ class MyProducer implements Runnable {
 
         System.out.println(color + "Adding EOF and existing...");
         bufferLock.lock();
-        buffer.add(EOF);
-        bufferLock.unlock();
+        try {
+            buffer.add(EOF);
+        } finally {
+            bufferLock.unlock();
+        }
     }
 }
 
