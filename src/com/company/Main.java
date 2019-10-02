@@ -21,8 +21,10 @@ public class Main {
         MyConsumer consumer2 = new MyConsumer(buffer, ThreadColour.ANSI_CYAN, bufferLock);
 
         executorService.execute(producer);
-        new Thread(consumer1).start();
-        new Thread(consumer2).start();
+        executorService.execute(consumer1);
+        executorService.execute(consumer2);
+
+        executorService.shutdown();
     }
 }
 
