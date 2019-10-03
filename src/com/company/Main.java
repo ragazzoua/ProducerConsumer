@@ -12,12 +12,14 @@ public class Main {
     public static final String EOF = "EOF";
 
     public static void main(String[] args) {
-        List<String> buffer = new ArrayList<>();
-        ReentrantLock bufferLock = new ReentrantLock();
+        ArrayBlockingQueue<String> buffer = new ArrayBlockingQueue<>();
+
+
         ExecutorService executorService= Executors.newFixedThreadPool(3);
-        MyProducer producer = new MyProducer(buffer, ThreadColour.ANSI_BLUE, bufferLock);
-        MyConsumer consumer1 = new MyConsumer(buffer, ThreadColour.ANSI_PURPLE, bufferLock);
-        MyConsumer consumer2 = new MyConsumer(buffer, ThreadColour.ANSI_CYAN, bufferLock);
+
+        MyProducer producer = new MyProducer(buffer, ThreadColour.ANSI_BLUE );
+        MyConsumer consumer1 = new MyConsumer(buffer, ThreadColour.ANSI_PURPLE );
+        MyConsumer consumer2 = new MyConsumer(buffer, ThreadColour.ANSI_CYAN);
 
         executorService.execute(producer);
         executorService.execute(consumer1);
@@ -44,14 +46,14 @@ public class Main {
 }
 
 class MyProducer implements Runnable {
-    private List<String> buffer;
+    private ArrayBlockingQueue<String> buffer;
     private String color;
-    private ReentrantLock bufferLock;
 
-    public MyProducer(List<String> buffer, String color, ReentrantLock bufferlock) {
+
+    public MyProducer(ArrayBlockingQueue<String> buffer, String color) {
         this.buffer = buffer;
         this.color = color;
-        this.bufferLock = bufferlock;
+
     }
 
     @Override
