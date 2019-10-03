@@ -3,8 +3,7 @@ package com.company;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static com.company.Main.EOF;
@@ -23,6 +22,22 @@ public class Main {
         executorService.execute(producer);
         executorService.execute(consumer1);
         executorService.execute(consumer2);
+
+        Future<String> future = executorService.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                System.out.println(ThreadColour.ANSI_WHITE + "I am being printed for the Callable class");
+                return "This is callable result";
+            }
+        });
+
+        try {
+            System.out.println(future.get());
+        }catch (ExecutionException e){
+            System.out.println("Something went wrong");
+        }catch (InterruptedException e){
+            System.out.println("Thread running the task was interrupted");
+        }
 
         executorService.shutdown();
     }
